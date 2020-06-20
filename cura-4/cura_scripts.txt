@@ -1,0 +1,30 @@
+;start gcode
+;Sliced at: {day} {date} {time}
+G21        ;metric values
+G90        ;absolute positioning
+M82        ;set extruder to absolute mode
+M107       ;start with the fan off
+; *** Preheat at the same time
+M140 S{material_bed_temperature}
+M104 S{material_print_temperature} T0
+M105
+M190 S{material_bed_temperature}
+M109 S{material_print_temperature} T0
+
+G28 ; home everything
+G92 E0                  ;zero the extruded length
+G1 Z0.2 F1000
+G1 X60 E9 F1000
+G1 X100 E12.5 F1000
+G92 E0                  ;zero the extruded length again
+G1 F{travel_speed}
+
+
+;End GCode
+M104 S0                     ;extruder heater off
+M140 S0                     ;heated bed heater off (if you have it)
+G91                                    ;relative positioning
+G1 E-1 F300                            ;retract the filament a bit before lifting the nozzle, to release some of the pressure
+G1 Z+0.5 E-5 X0 Y200 F4000 ;move Z up a bit and retract filament even more
+M84                         ;steppers off
+G90                         ;absolute positioning
